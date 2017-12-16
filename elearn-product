@@ -1,0 +1,62 @@
+{% assign lable_sale = false %}
+{% if product.compare_at_price_min > product.price_min %}
+{% assign lable_sale = true %}
+{% endif %}
+
+{% assign lable_out = true %}
+{% if product.available  %}
+{% assign lable_out = false %}
+{% endif %}
+
+<div class="grid-item product-item col-sm-6" id="product-{{ product.id }}">
+
+ 
+
+  <div class="product-inner {% if lable_out %} out-stock-product {% endif %}">
+    
+    
+    
+    <div class="product-image">
+   
+      
+      
+      {% if lable_sale or lable_out %}
+        <div class="product-label">
+          {% if lable_sale %}
+          -{{ product.compare_at_price_max | minus:product.price | times:100 | divided_by:product.compare_at_price_max |round: 0 }}%
+          {% endif %}
+          {% if lable_out %}
+          <span {% if settings.enable_multilang %}data-translate="product.out_of_stock"{%endif%}>{{ 'product.out_of_stock' | t }}</span>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if product.description contains "[label-icon-new]" %}
+        <div class="label-new" {% if settings.enable_multilang %}data-translate="product.label_icon_new"{%endif%}>{{ 'product.label_icon_new' | t }}</div>
+        {% endif %}
+      
+         
+     
+<div role="listbox">
+          {% for image in product.images %}
+          <div class="responsive-images item{% if forloop.first %} active{% endif %}">
+            <a href="{{ product.url | within: collection }}"><img src="{{ image | product_img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}"></a>
+          </div>
+          {% endfor %}
+        </div>
+      <h3>
+         <a class="product-title" href="{{ product.url | within: collection }}"> {{ product.title }}</a>
+         </h3>
+       
+      
+      <p>{{ product.description | truncatewords: 50 }}</p>
+
+    </div>
+     <div class="add-to-cart">
+    <a class="btn" href="{{ product.url | within: collection }}">learn more</a>
+    </div>
+ 
+   
+    <div class="clr"></div>
+  </div>
+      <div class="clr"></div>
+</div>
