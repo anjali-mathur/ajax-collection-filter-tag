@@ -1,0 +1,66 @@
+##https://globalpayroll.myshopify.com/collections/e-learning/
+
+{% comment %}
+  The contents of the collection.liquid template can be found in /sections/collection-template.liquid
+{% endcomment %}
+
+{% section 'e-learn-template' %}
+
+<script>
+   $(function() { 
+     var  activeCountry  =  $('.country-list option:selected').data('handle');
+   	 var  activeYear  =  $('.year-option option:selected').data('handle');
+     
+   $(document).on('change', '.year-list', function(e){
+     e.preventDefault();
+     el = $('.year-list option:selected');
+     activeYear = el.data('handle');
+     filter_data();
+   }); 
+     $(document).on('click', '.clear-year', function(e){
+     e.preventDefault();
+     activeYear = '';
+     filter_data();
+   });
+     
+   $(document).on('change', '.country-list', function(e){
+     e.preventDefault();
+     el = $('.country-list option:selected');
+     activeCountry = el.data('handle');
+     filter_data();
+   }); 
+     $(document).on('click', '.clear-country', function(e){
+     e.preventDefault();
+     activeCountry = '';
+     filter_data();
+   });
+      
+   function filter_data(){
+    
+     var base_url = window.location.origin+'/collections/{{collection.handle}}/';
+      var slug = ''; 
+          
+     if(activeYear || activeCountry){
+        slug += '';
+     }  
+     if(activeYear){
+       slug += activeYear;   
+     }
+     if(activeYear && activeCountry){
+        slug += '+';
+     } 
+     if(activeCountry){
+       slug += activeCountry;   
+     }     
+     
+     var get_url = base_url+slug;
+      $('.resource-right').html('<div class="_jsLoaderDiv"><img class="_jsLoader" src="https://cdn.shopify.com/s/files/1/2358/5863/t/5/assets/loading.gif" ></div>');
+      $.get(get_url, function(data){
+	    $content =  $(data).find('.custom-filter').html();
+        $('.custom-filter').html($content);
+        history.pushState('', '', get_url);
+        
+      });
+   }  
+   });
+   </script>
